@@ -3,6 +3,7 @@ import "./App.css";
 import { geolocated } from "react-geolocated";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { Button, Form, FormGroup, Label, Input, Col } from "reactstrap";
+
 const DEFAULT_LATITUDE = 48;
 const DEFUALT_LANGITUDE = -123;
 
@@ -27,11 +28,6 @@ class App extends React.Component {
       submit: !this.state.submit,
     });
   }
-  toggleSubmit = () => {
-    this.setState({
-      submit: !this.state.submit,
-    });
-  };
 
   componentDidUpdate() {
     if (this.state.submit)
@@ -62,11 +58,11 @@ class App extends React.Component {
                 <div className="row row-content">
                   <div className="col-12">
                     <h1>You are here! </h1>
-                    <p>
+                    <h6>
                       Latitude : {latitude}
                       <br />
                       Longitude : {longitude}
-                    </p>
+                    </h6>
                     <h3>Send us your Location</h3>
                   </div>
                   <div className="col-12 col-md-9">
@@ -108,8 +104,6 @@ class App extends React.Component {
               <Popup className="thank">
                 <h3> Sent successfully !</h3>
                 <h1> Thank you!</h1>
-
-                {this.toggleSubmit}
               </Popup>
             )}
           </Marker>
