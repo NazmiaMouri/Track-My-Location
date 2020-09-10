@@ -14,29 +14,28 @@ class App extends React.Component {
       name: "",
       lat: "",
       lon: "",
+      submit: false,
     };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateState = this.updateState.bind(this);
   }
-  handleInputChange(event) {
-    // console.log(event)
-    const target = event.target;
-    // console.log(target)
-    const value = target.value;
 
-    const name = target.name;
-    // console.log(name)
-
+  updateState(lat, long) {
     this.setState({
-      [name]: value,
+      lat: lat,
+      lon: long,
+      submit: !this.state.submit,
     });
   }
+  toggleSubmit = () => {
+    this.setState({
+      submit: !this.state.submit,
+    });
+  };
 
-  handleSubmit(event) {
-    console.log("Information: " + JSON.stringify(this.state));
-
-    event.preventDefault();
+  componentDidUpdate() {
+    if (this.state.submit)
+      console.log("Information: " + JSON.stringify(this.state));
   }
 
   render() {
@@ -54,70 +53,65 @@ class App extends React.Component {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {!this.props.coords && <div> Loading ...</div>}
+
         {this.props.coords && (
           <Marker position={[latitude, longitude]}>
-            <Popup>
-              {/* <Form */}
-              <div className="row row-content">
-                <div className="col-12">
-                  <h1>You are here!</h1>
-                  <h6>Send us your Location</h6>
+            {!this.state.submit ? (
+              <Popup>
+                {/* <Form */}
+                <div className="row row-content">
+                  <div className="col-12">
+                    <h1>You are here! </h1>
+                    <p>
+                      Latitude : {latitude}
+                      <br />
+                      Longitude : {longitude}
+                    </p>
+                    <h3>Send us your Location</h3>
+                  </div>
+                  <div className="col-12 col-md-9">
+                    <Form>
+                      <FormGroup row>
+                        <Label htmlFor="name" md={2} lg={6}>
+                          Your Name{" "}
+                        </Label>
+                        <Col md={10} lg={12}>
+                          <Input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Your Name"
+                            value={this.state.name}
+                            onChange={(e) => {
+                              this.setState({
+                                name: e.target.value,
+                              });
+                            }}
+                          />
+                        </Col>
+                      </FormGroup>
+
+                      <Button
+                        className="offset-5"
+                        color="primary"
+                        value="submit"
+                        onClick={() => this.updateState(latitude, longitude)}
+                      >
+                        {" "}
+                        Send
+                      </Button>
+                    </Form>
+                  </div>
                 </div>
-                <div className="col-12 col-md-9">
-                  <Form onSubmit={this.handleSubmit}>
-                    <FormGroup row>
-                      <Label htmlFor="name" md={2} lg={6}>
-                        Your Name{" "}
-                      </Label>
-                      <Col md={10} lg={12}>
-                        <Input
-                          type="text"
-                          id="name"
-                          name="name"
-                          placeholder="Your Name"
-                          value={this.state.name}
-                          onChange={this.handleInputChange}
-                        />
-                      </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Label htmlFor="lat" md={2} lg={4}>
-                        Latitude{" "}
-                      </Label>
-                      <Col md={10} lg={12}>
-                        <Input
-                          type="text"
-                          id="lat"
-                          name="lat"
-                          placeholder="Latitude"
-                          value={this.state.lat}
-                          onChange={this.handleInputChange}
-                        />
-                      </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Label htmlFor="lon" md={2} lg={4}>
-                        Longitude{" "}
-                      </Label>
-                      <Col md={10} lg={12}>
-                        <Input
-                          type="text"
-                          id="lon"
-                          name="lon"
-                          placeholder="Longitude"
-                          value={this.state.lon}
-                          onChange={this.handleInputChange}
-                        />
-                      </Col>
-                    </FormGroup>
-                    <Button color="primary" value="Submit">
-                      {" "}
-                      Send
-                    </Button>
-                  </Form>
-                </div>
-              </div>
-            </Popup>
+              </Popup>
+            ) : (
+              <Popup className="thank">
+                <h3> Sent successfully !</h3>
+                <h1> Thank you!</h1>
+
+                {this.toggleSubmit}
+              </Popup>
+            )}
           </Marker>
         )}
       </Map>

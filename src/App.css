@@ -4,3 +4,21 @@
     border-bottom: 1px ridge;
     min-height:400px;
 }
+.thank{
+    
+    display: flex;
+    flex-direction: column;
+   
+}
+.thank h3{
+    color: green;
+    text-align: center;
+}
+.thank  h1{
+    color: blue;
+    text-align: center;
+   
+}
+.thank h3 span{
+    text-align: center;
+}
